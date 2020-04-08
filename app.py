@@ -2,18 +2,20 @@
 ### Author: Jacob Pollien
 ### Date: 4/9/2020
 
-from flask import Flask, render_template, url_for
+from flask import Flask, flash, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import json
 from flask_heroku import Heroku
+from forms import CropSearchForm
 
 app = Flask( __name__ )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # disabled to save performance
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
-
+# Since I'm only going to have the one POST method, I'll keep this in the app.py
+# Normally I'd put this in a separate models.py file but here it's unnecessary.
 class Dataentry(db.Model):
     __tablename__ = "usda_crops_5yr"
 
@@ -53,8 +55,26 @@ def post_to_db():
     return 'Data successfully imported. To enter more data, <a href="{}">click here!</a>'.format(url_for("enter_data"))
 
 @app.route("/")
-def enter_data(): 
-    return render_template("dataentry.html")
+def index():
+    search = CropSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    
+    return render_template("index.html", form=search)
+
+@app.route('/results')
+def search_results(search):
+    results = []
+    search_string = search.data['search']
+    if search.data['search'] == '':
+        qry = db_session.query(Crops)
+        results = qry.all()
+    if not results:
+        flash('No results found!')
+        return redirect('/')
+    else:
+        # display results
+        return render_template('results.html', results=results)
 
 if __name__ == ' __main__':
     #app.debug = True
