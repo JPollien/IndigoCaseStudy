@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>data entry</title>
+    </head>
+    <body>
+        <form method="POST" action="{{ url_for('post_to_db') }}">
+            <label for="mydata">Input data here</label>
+            <input type="text" id="mydata" name="mydata">
+            <button type="submit">Submit data</button>
+        </form>
+    </body>
+</html>
