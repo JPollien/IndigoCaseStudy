@@ -1,1 +1,1 @@
-web: gunicorn app:indigocasestudyjtp
+web: gunicorn app:app
