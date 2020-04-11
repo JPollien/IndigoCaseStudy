@@ -1,81 +1,73 @@
-### Purpose: app that will push API to Heroku for consumption by front end
-### Author: Jacob Pollien
-### Date: 4/9/2020
-
-from flask import Flask, flash, render_template, url_for, request, redirect
+import os
+import os.path
+from flask import Flask, render_template
+from flask_rest_jsonapi import Api, ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_sqlalchemy import SQLAlchemy
-import sys
-import json
 from flask_heroku import Heroku
-from forms import CropSearchForm
+from sqlalchemy.orm.exc import NoResultFound
+from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi import fields
 
-app = Flask( __name__ )
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # disabled to save performance
+app = Flask(__name__)
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
+
+
+# Initialize SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(app)
 
-# Since I'm only going to have the one POST method, I'll keep this in the app.py
-# Normally I'd put this in a separate models.py file but here it's unnecessary.
-class Dataentry(db.Model):
+class DataModel(db.Model):
     __tablename__ = "usda_crops_5yr"
 
-    '''We could use FIPS_CODE as ID, but I could foresee a situation
-    wherein the FIPS code changed and messed with our primary key'''
     id = db.Column(db.Integer, primary_key=True)
     CROP = db.Column(db.String())
     FIPS_CODE = db.Column(db.Integer())
     COUNTY_NAME = db.Column(db.String())
-    STATE_CODE = db.Column(db.Integer())
+    STATE_CODE = db.Column(db.String())
     YEAR = db.Column(db.Integer())
     TOTAL_HARVESTED_ACRES = db.Column(db.Integer())
     TOTAL_YIELD = db.Column(db.Numeric())
 
-    def __init__ (self, CROP, FIPS_CODE, COUNTY_NAME, STATE_CODE, YEAR, TOTAL_HARVESTED_ACRES, TOTAL_YIELD):
-        self.CROP = crop
-        self.FIPS_CODE = FIPS_CODE
-        self.COUNTY_NAME = COUNTY_NAME
-        self.STATE_CODE = STATE_CODE
-        self.YEAR = YEAR
-        self.TOTAL_HARVESTED_ACRES = TOTAL_HARVESTED_ACRES
-        self.TOTAL_YIELD = TOTAL_YIELD
+class DataSchema(Schema):
+    class Meta:
+        '''I include these because I like being able to see where stuff comes
+        in case we end up having multiple tables in the same API.
+        Plus, metadata can be easily filtered out in the output dict.'''
+        type_ = 'usda_5yr_crop_table'
+        self_view = 'data_detail'
+        self_view_kwargs = {'id': '<id>'}
+        self_view_many = 'data_list'
+        
+    id = fields.Int(dump_only=True)
+    CROP = fields.Str(required=True)
+    FIPS_CODE = fields.Int(required=True)
+    COUNTY_NAME = fields.Str(required=True)
+    STATE_CODE = fields.Str(required=True)
+    YEAR = fields.Int(required=True)
+    TOTAL_HARVESTED_ACRES = fields.Int(required=True)
+    TOTAL_YIELD = fields.Number(required=True)
 
-# Let's set up a route to accept new data so we can keep this updated
-@app.route("/submit", methods=["POST"])
-def post_to_db():
-    indata = Dataentry(request.form['CROP', 'FIPS_CODE', 'COUNTY_NAME', 'STATE_CODE', 'YEAR', 'TOTAL_HARVESTED_ACRES', 'TOTAL_YIELD'])
-    data = copy(indata. __dict__ )
-    del data["_sa_instance_state"]
-    try:
-        db.session.add(indata)
-        db.session.commit()
-    except Exception as e:
-        print("\n FAILED entry: {}\n".format(json.dumps(data)))
-        print(e)
-        sys.stdout.flush()
-    return 'Data successfully imported. To enter more data, <a href="{}">click here!</a>'.format(url_for("enter_data"))
+# Create resource manager
+class DataList(ResourceList):
+    schema = DataSchema
+    data_layer = {'session': db.session,
+                  'model': DataModel}
 
-@app.route("/")
-def index():
-    search = CropSearchForm(request.form)
-    if request.method == 'POST':
-        return search_results(search)
-    
-    return render_template("index.html", form=search)
+class DataDetail(ResourceDetail):
+    schema = DataSchema
+    data_layer = {'session': db.session,
+                  'model': DataModel}
 
-@app.route('/results')
-def search_results(search):
-    results = []
-    search_string = search.data['search']
-    if search.data['search'] == '':
-        qry = db_session.query(Crops)
-        results = qry.all()
-    if not results:
-        flash('No results found!')
-        return redirect('/')
-    else:
-        # display results
-        return render_template('results.html', results=results)
+api = Api(app)
+api.route(DataList, 'data_list', '/data')
+api.route(DataDetail, 'data_detail', '/data/<int:id>')
 
-if __name__ == ' __main__':
-    #app.debug = True
-    app.run()
+@app.route('/')
+def root():
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
