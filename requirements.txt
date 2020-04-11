@@ -6,6 +6,7 @@ flask-heroku==0.1.9
 Flask-Migrate==2.5.3
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.1
+marshmallow==2.18.0
 marshmallow-jsonapi==0.23.1
 Flask-REST-JSONAPI==0.30.1
 gunicorn==20.0.4
