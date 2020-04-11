@@ -1,24 +1,25 @@
-<doctype html>
-<head>
-    <title>Flask Crops Database</title>
-</head>
-<h2>Flask Crops Database</h2>
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Jacob Pollien Indigo Case Study</h1>
+<p>This API provides these endpoints:</p>
+</body>
+<table>
+<thead><tr><th>url</th><th>method</th><th>endpoint</th><th>action</th></tr></thead>
+<tbody>
+<tr><td>/data</td><td>GET</td><td>data_list</td><td>Retrieve a collection of data</td></tr>
+<tr><td>/data</td><td>POST</td><td>data_list</td><td>Create new data</td></tr>
+<tr><td>/data/&lt;int:id&gt;</td><td>GET</td><td>data_detail</td><td>Retrieve a specific record</td></tr>
+<tr><td>/data/&lt;int:id&gt;</td><td>PATCH</td><td>data_detail</td><td>Update a specific record</td></tr>
+<tr><td>/data/&lt;int:id&gt;</td><td>DELETE</td><td>data_detail</td><td>Delete a specific record</td></tr>
+</tbody>
+</table>
+<br><p>This API supports simple filters per flask-rest-jsonapi.  Formatting for calls follows:<br>
+<p style="margin-left: 40px">GET /data?filter[CROP]=RICE<br>
+Accepts: json</p></p><br>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-{% from "_formhelpers.html" import render_field %}
-<form method=post>
-  <dl>
-    {{ render_field(form.select) }}
-    <p>
-    {{ render_field(form.search) }}
-  </dl>
-  <p><input type=submit value=Search>
-</form>
+<p>You can also include more than one simple filter in a request:<br>
+<p style="margin-left: 40px">GET /data?filter[CROP]=RICE&filter[COUNTY_NAME]=PRAIRIE<br>
+Accepts: json</p></p>
+</body>
+</html>
