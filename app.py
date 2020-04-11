@@ -32,14 +32,14 @@ class DataModel(db.Model):
     TOTAL_YIELD = db.Column(db.Numeric())
 
 class DataSchema(Schema):
-    class Meta:
+    #class Meta:
         '''I include these because I like being able to see where stuff comes
         in case we end up having multiple tables in the same API.
         Plus, metadata can be easily filtered out in the output dict.'''
-        type_ = 'usda_5yr_crop_table'
-        self_view = 'data_detail'
-        self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'data_list'
+    #    type_ = 'usda_5yr_crop_table'
+    #    self_view = 'data_detail'
+    #    self_view_kwargs = {'id': '<id>'}
+    #    self_view_many = 'data_list'
         
     id = fields.Int(dump_only=True)
     CROP = fields.Str(required=True)
