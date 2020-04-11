@@ -12,17 +12,17 @@ with urlopen('https://indigocasestudyjtp.herokuapp.com/data') as response:
 
 print(datadict)
 
-rows = []
-
-for data in datadict:
-    data_row = data['attributes']
-    time = data['id']
-
-    for row in data_row:
-        row['id'] = time
-        rows.append(row)
-
-df = pd.DataFrame(rows)
+##rows = []
+##
+##for data in datadict:
+##    data_row = data['attributes']
+##    time = data['id']
+##
+##    for row in data_row:
+##        row['id'] = time
+##        rows.append(row)
+##
+##df = pd.DataFrame(rows)
 
 #df = pd.DataFrame.from_dict(datadict['data'])#, orient='index')
 
@@ -35,5 +35,5 @@ df = pd.DataFrame(rows)
 
 #df2 = pd.DataFrame.from_dict(df)
 
-with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-    print(df)
+#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+#    print(df)
