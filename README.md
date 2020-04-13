@@ -1,8 +1,12 @@
 Data Visualization Engineer (Back End)
+
 Case Study - Spring 2020
+
 Author: Jacob Pollien
 
+
 Objective: build endpoints using Flask that provide data to an application.  This application should allow the user to explore where different commodity crops are grown in the United States.
+
 
 Overview of my approach:
 I opted for a flattened Flask approach leaning on flask_rest_jsonapi to help me compact the entire application into more or less a single file.  The hierarchy of this application is:
