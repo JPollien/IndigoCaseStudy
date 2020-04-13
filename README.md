@@ -1,13 +1,13 @@
-#Data Visualization Engineer (Back End)
-##Case Study - Spring 2020
-##Author: Jacob Pollien
+# Data Visualization Engineer (Back End)
+## Case Study - Spring 2020
+## Author: Jacob Pollien
 
 
-##Objective:
+## Objective:
 Build endpoints using Flask that provide data to an application.  This application should allow the user to explore where different commodity crops are grown in the United States.
 
 
-##Overview of my approach:
+## Overview of my approach:
 I opted for a flattened Flask approach leaning on flask_rest_jsonapi to help me compact the entire application into more or less a single file.  The hierarchy of this application is:
 
 Indigo Case Study>
@@ -27,4 +27,4 @@ The interactive map was made in R and relies on the Leaflet and Shiny packages. 
 
 The map is hosted at: https://jpollien.shinyapps.io/IndigoCaseStudy/
 
-##PLEASE NOTE: due to the aforementioned sleep timer of Heroku, the app may time out the first time you try to load it.  If this happens, please refresh and it should work fine.
+## PLEASE NOTE: due to the aforementioned sleep timer of Heroku, the app may time out the first time you try to load it.  If this happens, please refresh and it should work fine.
