@@ -1,7 +1,5 @@
-Data Visualization Engineer (Back End)
-
+**Data Visualization Engineer (Back End)
 Case Study - Spring 2020
-
 Author: Jacob Pollien
 
 
@@ -28,4 +26,4 @@ The interactive map was made in R and relies on the Leaflet and Shiny packages. 
 
 The map is hosted at: https://jpollien.shinyapps.io/IndigoCaseStudy/
 
-PLEASE NOTE: due to the aforementioned sleep timer of Heroku, the app may time out the first time you try to load it.  If this happens, please refresh and it should work fine.
+**PLEASE NOTE: due to the aforementioned sleep timer of Heroku, the app may time out the first time you try to load it.  If this happens, please refresh and it should work fine.
