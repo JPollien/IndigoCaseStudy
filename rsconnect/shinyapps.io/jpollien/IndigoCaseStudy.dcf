@@ -1,0 +1,12 @@
+name: IndigoCaseStudy
+title: IndigoCaseStudy
+username:
+account: jpollien
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2108534
+bundleId: 3007401
+url: https://jpollien.shinyapps.io/IndigoCaseStudy/
+when: 1586793510.85174
+asMultiple: FALSE
+asStatic: FALSE
